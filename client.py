@@ -3,6 +3,7 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext
 from cryptography.fernet import Fernet
+import queue
 
 DARK_GREY = '#121212'
 MEDIUM_GREY = '#1F1B24'
@@ -18,9 +19,11 @@ key = b'hB5IkGwJDELRrsRTc_ZonQNskKKP4Zaaec2dV4G1fxY='
 cipher = Fernet(key)
 
 class Client:
-    def __init__(self, host='127.0.0.1', port=1234):
+    def __init__(self, host='192.168.0.20', port=1234):
         self.host = host
         self.port = port
+        self.message_queue = queue.Queue()
+
 
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((self.host, self.port))
