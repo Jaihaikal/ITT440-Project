@@ -14,7 +14,7 @@ key = b'hB5IkGwJDELRrsRTc_ZonQNskKKP4Zaaec2dV4G1fxY='
 cipher = Fernet(key)
 
 class Server:
-    def __init__(self, host='127.0.0.1', port=1234):
+    def __init__(self, host='192.168.0.20', port=1234):  # Bind to all available interfaces
         self.clients = []
         self.host = host
         self.port = port
@@ -32,7 +32,7 @@ class Server:
         self.label = tk.Label(self.top_frame, text="Clients Connected:", font=FONT, bg=DARK_GREY, fg=WHITE)
         self.label.pack()
 
-        self.client_list = scrolledtext.ScrolledText(self.top_frame, height=5, font=FONT,fg=WHITE, bg=MEDIUM_GREY)
+        self.client_list = scrolledtext.ScrolledText(self.top_frame, height=5, font=FONT, fg=WHITE, bg=MEDIUM_GREY)
         self.client_list.pack()
 
         self.label = tk.Label(self.top_frame, text="Clients Messages:", font=FONT, bg=DARK_GREY, fg=WHITE)
@@ -41,7 +41,7 @@ class Server:
         self.bottom_frame = tk.Frame(self.root, bg=DARK_GREY)
         self.bottom_frame.pack()
 
-        self.messages = scrolledtext.ScrolledText(self.bottom_frame, height=10, font=FONT,fg=WHITE, bg=MEDIUM_GREY)
+        self.messages = scrolledtext.ScrolledText(self.bottom_frame, height=10, font=FONT, fg=WHITE, bg=MEDIUM_GREY)
         self.messages.pack()
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -68,7 +68,6 @@ class Server:
         self.client_list.insert(tk.END, f"Client {addr} connected\n")
         self.client_list.yview(tk.END)
 
-        # Inform the new client of existing clients
         for client in self.clients:
             if client['socket'] != client_socket:
                 client_socket.send(cipher.encrypt(f"{client['username']} is already in the chat".encode('utf-8')))
@@ -118,3 +117,4 @@ class Server:
 if __name__ == "__main__":
     server = Server()
     server.run()
+
